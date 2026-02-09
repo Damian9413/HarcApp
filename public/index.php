@@ -1,19 +1,9 @@
 <?php
 
-
-//klasa do polaczenia z baza
+// Ładujemy połączenie z bazą (będzie potrzebne w kontrolerach).
 require_once __DIR__ . '/../src/Database.php';
+// Ładujemy router – on zdecyduje, który kontroler i metoda się wykonają.
+require_once __DIR__ . '/../src/Routing.php';
 
-//CZy dziala
-$pdo = Database::connect();
-// Test: czy PHP i serwer działają
-echo '<h1>HarcApp</h1>';
-echo '<p>PHP: ' . phpversion() . '</p>';
-
-echo '<p>Połączenie z bazą: OK</p>';
-
-//stmt - kurier 
-$stmt = $pdo->query('SELECT 1');
-echo '<p>Zapytanie testowe: ' . ($stmt ? 'OK' : 'błąd') . '</p>';
-
-
+// Jedna linijka na start: wszystko idzie przez router.
+Routing::run();
