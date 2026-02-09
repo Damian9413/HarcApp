@@ -1,0 +1,62 @@
+# HarcApp - Docker Compose
+# Uruchom: docker-compose up -d
+# Zatrzymaj: docker-compose down
+
+services:
+  # Baza danych PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: harcapp_postgres
+    environment:
+      POSTGRES_USER: harcapp
+      POSTGRES_PASSWORD: harcapp_secret
+      POSTGRES_DB: harcapp_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U harcapp -d harcapp_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # pgAdmin - panel do zarządzania bazą (przeglądarka)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: harcapp_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@harcapp.pl
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Aplikacja PHP (backend)
+  php:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: harcapp_php
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Serwer WWW Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: harcapp_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+volumes:
+  postgres_data:

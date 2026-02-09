@@ -1,0 +1,25 @@
+# PHP
+/vendor/
+.phpunit.result.cache
+composer.lock
+
+# Środowisko / konfiguracja lokalna
+.env
+.env.local
+config/local.php
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logi i cache aplikacji
+/logs/
+/cache/
+/tmp/
+*.log
+
+# Uploady użytkowników (opcjonalnie – jeśli nie chcesz ich w repo)
+# /public/uploads/*
