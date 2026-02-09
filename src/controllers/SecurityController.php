@@ -46,4 +46,16 @@ class SecurityController
         echo '</form>';
         echo '<p><a href="/">Strona główna</a></p>';
     }
+
+    public function logout(): void
+    {
+        // Sesja musi być aktywna, żeby ją zniszczyć – jeśli nie (np. wejście bez logowania), uruchom
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+        session_unset();   // czyści $_SESSION (np. user_id, user_email)
+        session_destroy(); // niszczy sesję (BINGO D5 – poprawne wylogowanie)
+        header('Location: /');
+        exit;
+    }
 }
