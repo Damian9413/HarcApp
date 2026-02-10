@@ -45,4 +45,54 @@ class UserRepository
         return $stmt->execute();
     }
 
+
+
+
+    /** Lista użytkowników oczekujących na zatwierdzenie (is_approved = false). */
+    public function getUnapprovedUsers(): array
+    {
+        $stmt = $this->database->prepare('SELECT id, email, name, role, is_approved FROM users WHERE is_approved = false ORDER BY id');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /** Ustawia is_approved = true dla użytkownika o podanym id. */
+    public function approveUser(int $id): bool
+    {
+        $stmt = $this->database->prepare('UPDATE users SET is_approved = true WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount() === 1;
+    }
+
+    /** Lista zatwierdzonych użytkowników (is_approved = true). */
+    public function getApprovedUsers(): array
+    {
+        $stmt = $this->database->prepare('SELECT id, email, name, role, is_approved FROM users WHERE is_approved = true ORDER BY email');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /** Zmienia rolę użytkownika. Dozwolone: uczestnik, punktowy, twórca, admin. */
+    public function updateUserRole(int $id, string $role): bool
+    {
+        $allowed = ['uczestnik', 'punktowy', 'twórca', 'admin'];
+        if (!in_array($role, $allowed, true)) {
+            return false;
+        }
+        $stmt = $this->database->prepare('UPDATE users SET role = :role WHERE id = :id');
+        $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount() === 1;
+    }
+
+    /** Usuwa użytkownika o podanym id. */
+    public function deleteUser(int $id): bool
+    {
+        $stmt = $this->database->prepare('DELETE FROM users WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount() === 1;
+    }
 }
