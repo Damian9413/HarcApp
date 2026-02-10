@@ -6,6 +6,8 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    height: 100%;
+    background-color: #131010;
 }
 
 body {
@@ -25,6 +27,7 @@ body {
 /* cala strona logowania */
 .login-page {
     min-height: 100vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -205,7 +208,7 @@ body {
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
     color: #FFFFFF;
-    font-size: 22px;
+    font-size: 25px;
     font-family: inherit;
     cursor: pointer;
     margin-top: 0.5rem;
@@ -233,15 +236,17 @@ body {
       display: block;
       flex: 0 0 50%;
       width: 50%;
-      height: 100vh;
+      height: 100%;
+      min-height: 100vh;
       background-image: url('/images/wal_172619-campfire-8084064_1920.jpg');
       background-size: cover;
-      background-position: center;
+      background-position: center 40%;
     }
 
     .login-right {
       flex: 0 0 50%;
       width: 50%;
+      height: 100%;
       min-height: 100vh;
       display: flex;
       justify-content: center;

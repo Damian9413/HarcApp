@@ -92,28 +92,14 @@ class SecurityController
                 } else {
                     $passwordHash = password_hash($password, PASSWORD_BCRYPT);
                     UserRepository::getInstance()->addUser($email, $passwordHash, $name, 'uczestnik');
-                    echo '<h2>Rejestracja</h2>';
-                    echo '<p>Konto utworzone. Czekaj na akceptację administratora.</p>';
-                    echo '<p><a href="/security/login">Zaloguj się</a></p>';
-                    echo '<p><a href="/">Strona główna</a></p>';
+                    $success = true;
+                    require __DIR__ . '/../views/register.php';
                     return;
                 }
             }
         }
 
-        // Formularz: przy GET lub przy POST z błędem
-        echo '<h2>Rejestracja</h2>';
-        if ($error !== '') {
-            echo '<p style="color: red;">' . htmlspecialchars($error) . '</p>';
-        }
-        echo '<form method="post" action="/security/register">';
-        echo '<label>Email: <input type="email" name="email" value="' . htmlspecialchars($email) . '" required></label><br>';
-        echo '<label>Hasło: <input type="password" name="password" required></label><br>';
-        echo '<label>Powtórz hasło: <input type="password" name="password_repeat" required></label><br>';
-        echo '<label>Imię: <input type="text" name="name" value="' . htmlspecialchars($name) . '" required></label><br>';
-        echo '<button type="submit">Zarejestruj się</button>';
-        echo '</form>';
-        echo '<p><a href="/security/login">Masz konto? Zaloguj się</a></p>';
-        echo '<p><a href="/">Strona główna</a></p>';
+        // Formularz: przy GET lub przy POST z błędem – widok ze stylami
+        require __DIR__ . '/../views/register.php';
     }
 }
