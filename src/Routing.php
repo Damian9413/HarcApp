@@ -1,17 +1,14 @@
 <?php
 
 class Routing{
-    //Glowna metoda
+    
     public static function run(): void{
-        //Request URI
         $uri = $_SERVER['REQUEST_URI'] ?? '/';
-
-        //wyciagamy path z URI
         $path = parse_url($uri, PHP_URL_PATH);
-       
         $path = rtrim($path, '/') ?: '/';
 
-        if ($path === '/' || $path === '') {
+        // sciezki bezposrednie
+        if ($path === '/' || $path === '' || $path === '/home') {
             require __DIR__ . '/controllers/HomeController.php';
             $controller = new HomeController();
             $controller->index();
@@ -25,54 +22,68 @@ class Routing{
             return;
         }
 
-        // Usuwamy slash z początku i dzielimy path na segmenty.
-        // Np. "/security/login" → ["security", "login"].
+        if ($path === '/game') {
+            require __DIR__ . '/controllers/GameController.php';
+            $controller = new GameController();
+            $controller->index();
+            return;
+        }
+
+        // /kontroler/akcja
         $path = ltrim($path, '/');
         $segments = explode('/', $path);
 
-        // Pierwszy segment = nazwa kontrolera (np. security → SecurityController).
-        // Drugi segment = nazwa akcji/metody (np. login → metoda login()).
-        // Jeśli brak – używamy domyślnych: home, index.
         $controllerName = $segments[0] ?? 'home';
         $action = $segments[1] ?? 'index';
 
-        //budujemy nazwe clasy security → SecurityController.
         $controllerClass = ucfirst($controllerName) . 'Controller';
-
-        // Ścieżka do pliku kontrolera: src/controllers/SecurityController.php.
         $controllerFile = __DIR__ . '/controllers/' . $controllerClass . '.php';
 
-        // Jeśli plik nie istnieje – 404.
         if (!file_exists($controllerFile)) {
-            http_response_code(404);
-            echo '404 Not Found';
+            self::renderError(404);
             return;
         }
 
-        //ladowanie pliku z definicja klasy kontrolera
         require $controllerFile;
 
         if (!class_exists($controllerClass)) {
-            http_response_code(500);
-            echo '500 Controller not found';
+            self::renderError(500);
             return;
         }
 
-        //wywolanie konstruktora, zeby nowy obiekt
         $controller = new $controllerClass();
-
-        //nazwa metody do wywolania - jak login
         $method = $action;
 
-        // Sprawdzenie, czy kontroler ma taką metodę.
         if (!method_exists($controller, $method)) {
-            http_response_code(404);
-            echo '404 Action not found';
+            self::renderError(404);
             return;
         }
 
-        // Wywołanie metody kontrolera – np. $controller->login().
         $controller->$method();
+    }
 
+    // wyswietla strone bledu
+    public static function renderError(int $code): void
+    {
+        http_response_code($code);
+        $errorFile = __DIR__ . '/views/errors/' . $code . '.php';
+        
+        if (file_exists($errorFile)) {
+            require $errorFile;
+        } else {
+            echo $code . ' Error';
+        }
+    }
+
+    public static function forbidden(): void
+    {
+        self::renderError(403);
+        exit;
+    }
+
+    public static function notFound(): void
+    {
+        self::renderError(404);
+        exit;
     }
 }

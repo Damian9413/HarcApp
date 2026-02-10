@@ -6,6 +6,7 @@ class AdminController
 {
     public function index(): void
     {
+        // tylko admin
         if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
             header('Location: /');
             exit;
@@ -24,7 +25,7 @@ class AdminController
     {
         $labels = [
             'admin'     => 'Administrator',
-            'twórca'    => 'Twórca',
+            'tworca'    => 'Twórca',
             'punktowy'  => 'Punktowy',
             'uczestnik' => 'Uczestnik',
         ];
@@ -47,7 +48,6 @@ class AdminController
         exit;
     }
 
-    /** Zmiana roli użytkownika (POST: id, role). */
     public function changeRole(): void
     {
         if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
@@ -65,7 +65,7 @@ class AdminController
         exit;
     }
 
-    /** Usunięcie użytkownika (GET: id). Nie można usunąć samego siebie. */
+    // usuwanie usera - nie mozna samego siebie
     public function delete(): void
     {
         if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
@@ -73,11 +73,7 @@ class AdminController
             exit;
         }
         $id = (int) ($_GET['id'] ?? 0);
-        if ($id <= 0) {
-            header('Location: /admin');
-            exit;
-        }
-        if ($id === (int) $_SESSION['user_id']) {
+        if ($id <= 0 || $id === (int) $_SESSION['user_id']) {
             header('Location: /admin');
             exit;
         }

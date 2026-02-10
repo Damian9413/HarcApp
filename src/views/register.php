@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <script src="/js/validation.js" defer></script>
 </head>
 <body>
     <div class="login-page">

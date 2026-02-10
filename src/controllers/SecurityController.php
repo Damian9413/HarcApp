@@ -12,20 +12,18 @@ class SecurityController
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
 
-            // Pobieranie użytkowników z bazy
-            $userRepository = UserRepository::getInstance(); // ta sama instancja (Singleton)
-            $user = $userRepository->getUserByEmail($email); // zwraca wiersz
+            $userRepository = UserRepository::getInstance();
+            $user = $userRepository->getUserByEmail($email);
 
             if ($user === null || !password_verify($password, $user['password_hash'])) {
                 $error = 'Nieprawidłowy email lub hasło';
             } elseif (!$user['is_approved']) {
                 $error = 'Konto oczekuje na akceptację administratora.';
             } else {
-                // Sesja musi być aktywna (start w index.php); na wszelki wypadek uruchom, gdy nie jest
                 if (session_status() !== PHP_SESSION_ACTIVE) {
                     session_start();
                 }
-                session_regenerate_id(true); // nowy id – jak zmiana zamków
+                session_regenerate_id(true);
                 $_SESSION['user_id'] = (int) $user['id'];
                 $_SESSION['user_email'] = $user['email'];
                 $_SESSION['user_role'] = $user['role'];
@@ -34,27 +32,20 @@ class SecurityController
             }
         }
 
-        // Formularz: przy GET lub przy POST z błędem
         require __DIR__ . '/../views/login.php';
-    
     }
 
     public function logout(): void
     {
-        // Sesja musi być aktywna, żeby ją zniszczyć – jeśli nie (np. wejście bez logowania), uruchom
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
-        session_unset();   // czyści $_SESSION (np. user_id, user_email)
-        session_destroy(); // niszczy sesję (BINGO D5 – poprawne wylogowanie)
+        session_unset();
+        session_destroy();
         header('Location: /');
         exit;
     }
 
-    /**
-     * register() – adres: /security/register
-     * GET: formularz rejestracji. POST: walidacja, zapis użytkownika z is_approved = false.
-     */
     public function register(): void
     {
         $error = '';
@@ -67,7 +58,7 @@ class SecurityController
             $passwordRepeat = $_POST['password_repeat'] ?? '';
             $name = trim($_POST['name'] ?? '');
 
-            // Walidacja długości (BINGO D2)
+            // walidacja dlugosci
             if (strlen($email) > 50) {
                 $error = 'Email za długi.';
             } elseif (strlen($password) > 50) {
@@ -83,7 +74,6 @@ class SecurityController
             } else {
                 $existing = UserRepository::getInstance()->getUserByEmail($email);
                 if ($existing !== null) {
-                    // Email w bazie – sprawdzamy, czy konto ma już zgodę admina
                     if (!$existing['is_approved']) {
                         $error = 'Konto z tym emailem istnieje i czeka na akceptację administratora.';
                     } else {
@@ -99,7 +89,39 @@ class SecurityController
             }
         }
 
-        // Formularz: przy GET lub przy POST z błędem – widok ze stylami
         require __DIR__ . '/../views/register.php';
+    }
+
+    // api do sprawdzania maila - fetch
+    public function checkEmail(): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['error' => 'Method not allowed']);
+            return;
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true);
+        $email = trim($input['email'] ?? $_POST['email'] ?? '');
+
+        if (empty($email)) {
+            echo json_encode(['available' => false, 'message' => 'Email jest wymagany']);
+            return;
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode(['available' => false, 'message' => 'Nieprawidłowy format email']);
+            return;
+        }
+
+        $existing = UserRepository::getInstance()->getUserByEmail($email);
+        
+        if ($existing !== null) {
+            echo json_encode(['available' => false, 'message' => 'Ten email jest już zajęty']);
+        } else {
+            echo json_encode(['available' => true, 'message' => 'Email dostępny']);
+        }
     }
 }

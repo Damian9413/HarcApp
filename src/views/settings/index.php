@@ -19,12 +19,12 @@
             </div>
             
             <nav class="dashboard-nav">
-                <a href="/" class="dashboard-nav-item<?= ($sidebarActive ?? '') === 'dashboard' ? ' dashboard-nav-item--active' : '' ?>">
+                <a href="/home" class="dashboard-nav-item<?= ($sidebarActive ?? '') === 'dashboard' ? ' dashboard-nav-item--active' : '' ?>">
                     <span class="iconify" data-icon="mdi:view-dashboard" data-width="48" data-height="48"></span>
                     <span>Dashboard</span>
                 </a>
                 
-                <a href="#" class="dashboard-nav-item">
+                <a href="/game" class="dashboard-nav-item<?= ($sidebarActive ?? '') === 'games' ? ' dashboard-nav-item--active' : '' ?>">
                     <span class="iconify" data-icon="mdi:gamepad-variant-outline" data-width="48" data-height="48"></span>
                     <span>Gry</span>
                 </a>
@@ -105,11 +105,11 @@
         </main>
 
         <nav class="dashboard-footer-nav" aria-label="Nawigacja główna">
-            <a href="/" class="dashboard-footer-nav-item<?= ($sidebarActive ?? '') === 'dashboard' ? ' dashboard-footer-nav-item--active' : '' ?>">
+            <a href="/home" class="dashboard-footer-nav-item<?= ($sidebarActive ?? '') === 'dashboard' ? ' dashboard-footer-nav-item--active' : '' ?>">
                 <span class="iconify" data-icon="mdi:view-dashboard" data-width="28" data-height="28"></span>
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="dashboard-footer-nav-item">
+            <a href="/game" class="dashboard-footer-nav-item<?= ($sidebarActive ?? '') === 'games' ? ' dashboard-footer-nav-item--active' : '' ?>">
                 <span class="iconify" data-icon="mdi:gamepad-variant-outline" data-width="28" data-height="28"></span>
                 <span>Gry</span>
             </a>

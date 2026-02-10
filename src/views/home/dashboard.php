@@ -22,11 +22,11 @@
 
             <!-- Nawigacja -->
             <nav class="dashboard-nav">
-                <a href="/" class="dashboard-nav-item<?= ($sidebarActive ?? '') === 'dashboard' ? ' dashboard-nav-item--active' : '' ?>">
+                <a href="/home" class="dashboard-nav-item<?= ($sidebarActive ?? '') === 'dashboard' ? ' dashboard-nav-item--active' : '' ?>">
                     <span class="iconify" data-icon="mdi:view-dashboard" data-width="48" data-height="48"></span>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="dashboard-nav-item">
+                <a href="/game" class="dashboard-nav-item<?= ($sidebarActive ?? '') === 'games' ? ' dashboard-nav-item--active' : '' ?>">
                     <span class="iconify" data-icon="mdi:gamepad-variant-outline" data-width="48" data-height="48"></span>
                     <span>Gry</span>
                 </a>
@@ -36,7 +36,7 @@
                     <span>Użytkownicy</span>
                 </a>
                 <?php endif; ?>
-                <a href="#" class="dashboard-nav-item">
+                <a href="/settings" class="dashboard-nav-item<?= ($sidebarActive ?? '') === 'settings' ? ' dashboard-nav-item--active' : '' ?>">
                     <span class="iconify" data-icon="mdi:cog-outline" data-width="48" data-height="48"></span>
                     <span>Ustawienia</span>
                 </a>
@@ -64,39 +64,43 @@
 
             <!-- Karty akcji -->
             <div class="dashboard-cards">
-                <a href="#" class="panel-card dashboard-action-card">
+                <a href="/game" class="panel-card dashboard-action-card">
                     <span class="iconify dashboard-action-icon" data-icon="mdi:map-outline" data-width="48" data-height="48" style="color: #FF383C;"></span>
                     <div>
                         <h2 class="dashboard-card-title">Moje Gry</h2>
                         <p class="dashboard-card-subtitle">Zobacz i zarządzaj</p>
                     </div>
                 </a>
-                <a href="#" class="panel-card dashboard-action-card">
+                <?php if (isset($userRole) && ($userRole === 'admin' || $userRole === 'tworca')): ?>
+                <a href="/game/create" class="panel-card dashboard-action-card">
                     <span class="iconify dashboard-action-icon" data-icon="mdi:plus-circle-outline" data-width="48" data-height="48" style="color: #FF383C;"></span>
                     <div>
                         <h2 class="dashboard-card-title">Stwórz Grę</h2>
                         <p class="dashboard-card-subtitle">Stwórz własną grę</p>
                     </div>
                 </a>
+                <?php endif; ?>
             </div>
-            <a href="<?= (isset($userRole) && $userRole === 'admin') ? '/admin' : '#' ?>" class="panel-card dashboard-action-card dashboard-action-card--wide">
+            <?php if (isset($userRole) && $userRole === 'admin'): ?>
+            <a href="/admin" class="panel-card dashboard-action-card dashboard-action-card--wide">
                 <span class="iconify dashboard-action-icon" data-icon="mdi:account-group-outline" data-width="48" data-height="48" style="color: #FF383C;"></span>
                 <div>
                     <h2 class="dashboard-card-title">Zarządzaj użytkownikami</h2>
                     <p class="dashboard-card-subtitle">Zarządzaj dostępami i rolami</p>
                 </div>
             </a>
+            <?php endif; ?>
 
 
         </main>
 
         <!-- Nawigacja mobilna (dolny pasek) – widoczna tylko na mobile -->
         <nav class="dashboard-footer-nav" aria-label="Nawigacja główna">
-            <a href="/" class="dashboard-footer-nav-item<?= ($sidebarActive ?? '') === 'dashboard' ? ' dashboard-footer-nav-item--active' : '' ?>">
+            <a href="/home" class="dashboard-footer-nav-item<?= ($sidebarActive ?? '') === 'dashboard' ? ' dashboard-footer-nav-item--active' : '' ?>">
                 <span class="iconify" data-icon="mdi:view-dashboard" data-width="28" data-height="28"></span>
                 <span>Dashboard</span>
             </a>
-            <a href="#" class="dashboard-footer-nav-item">
+            <a href="/game" class="dashboard-footer-nav-item<?= ($sidebarActive ?? '') === 'games' ? ' dashboard-footer-nav-item--active' : '' ?>">
                 <span class="iconify" data-icon="mdi:gamepad-variant-outline" data-width="28" data-height="28"></span>
                 <span>Gry</span>
             </a>
@@ -106,7 +110,7 @@
                 <span>Użytkownicy</span>
             </a>
             <?php endif; ?>
-            <a href="#" class="dashboard-footer-nav-item">
+            <a href="/settings" class="dashboard-footer-nav-item<?= ($sidebarActive ?? '') === 'settings' ? ' dashboard-footer-nav-item--active' : '' ?>">
                 <span class="iconify" data-icon="mdi:cog-outline" data-width="28" data-height="28"></span>
                 <span>Ustawienia</span>
             </a>

@@ -20,7 +20,7 @@ class SettingsController
         $user = $repo->getUserById($userID);
         $userName = $user['name'] ?? '';
 
-        // Zapisz imię (POST)
+        // zapis imienia
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'])) {
             $name = trim($_POST['name'] ?? '');
             if ($name === '') {
@@ -74,7 +74,7 @@ class SettingsController
     {
         $labels = [
             'admin'     => 'Administrator',
-            'twórca'    => 'Twórca',
+            'tworca'    => 'Twórca',
             'punktowy'  => 'Punktowy',
             'uczestnik' => 'Uczestnik',
         ];
