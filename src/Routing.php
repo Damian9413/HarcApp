@@ -18,6 +18,13 @@ class Routing{
             return;
         }
 
+        if ($path === '/settings') {
+            require __DIR__ . '/controllers/SettingsController.php';
+            $controller = new SettingsController();
+            $controller->index();
+            return;
+        }
+
         // Usuwamy slash z początku i dzielimy path na segmenty.
         // Np. "/security/login" → ["security", "login"].
         $path = ltrim($path, '/');

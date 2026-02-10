@@ -95,4 +95,34 @@ class UserRepository
         $stmt->execute();
         return $stmt->rowCount() === 1;
     }
+
+    //Pobiera uzytkownika po id
+    public function getUserById(int $id): ?array
+    {
+        $stmt = $this->database->prepare('SELECT id, email, password_hash, name, role, is_approved FROM users WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
+    /** Aktualizacja imienia (ustawienia – profil). */
+    public function updateUserName(int $id, string $name): bool
+    {
+        $stmt = $this->database->prepare('UPDATE users SET name = :name WHERE id = :id');
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount() === 1;
+    }
+
+    /** Aktualizacja hasła (ustawienia – bezpieczeństwo). */
+    public function updatePassword(int $id, string $passwordHash): bool
+    {
+        $stmt = $this->database->prepare('UPDATE users SET password_hash = :hash WHERE id = :id');
+        $stmt->bindParam(':hash', $passwordHash, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount() === 1;
+    }
+
 }

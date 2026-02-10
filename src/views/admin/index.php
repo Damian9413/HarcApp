@@ -31,7 +31,7 @@
                     <span class="iconify" data-icon="mdi:account-group-outline" data-width="48" data-height="48"></span>
                     <span>Użytkownicy</span>
                 </a>
-                <a href="#" class="dashboard-nav-item">
+                <a href="/settings" class="dashboard-nav-item<?= ($sidebarActive ?? '') === 'settings' ? ' dashboard-nav-item--active' : '' ?>">
                     <span class="iconify" data-icon="mdi:cog-outline" data-width="48" data-height="48"></span>
                     <span>Ustawienia</span>
                 </a>
@@ -155,7 +155,7 @@
                 <span class="iconify" data-icon="mdi:account-group-outline" data-width="28" data-height="28"></span>
                 <span>Użytkownicy</span>
             </a>
-            <a href="#" class="dashboard-footer-nav-item">
+            <a href="/settings" class="dashboard-footer-nav-item<?= ($sidebarActive ?? '') === 'settings' ? ' dashboard-footer-nav-item--active' : '' ?>">
                 <span class="iconify" data-icon="mdi:cog-outline" data-width="28" data-height="28"></span>
                 <span>Ustawienia</span>
             </a>
