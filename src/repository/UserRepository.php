@@ -33,4 +33,16 @@ class UserRepository
         return $row ?: null;
     }
 
+    public function addUser(string $email, string $passwordHash, string $name, string $role = 'uczestnik'): bool
+    {
+        $stmt = $this->database->prepare('INSERT INTO users (email, password_hash, name, role, is_approved) VALUES (:email, :password_hash, :name, :role, :is_approved)');
+        $isApproved = false;
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':password_hash', $passwordHash, PDO::PARAM_STR);
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+        $stmt->bindParam(':is_approved', $isApproved, PDO::PARAM_BOOL);
+        return $stmt->execute();
+    }
+
 }
