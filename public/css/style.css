@@ -256,7 +256,7 @@ body {
 }
 
 .dashboard-sidebar {
-    width: 296px;
+    width: 220px;
     flex-shrink: 0;
     padding: 1rem;
     background: var(--panel-card-bg);
@@ -276,6 +276,11 @@ body {
     color: var(--text);
     font-size: var(--font-size-nav);
     line-height: 1.2;
+}
+
+.dashboard-logo .iconify {
+    width: 28px;
+    height: 28px;
 }
 
 .dashboard-nav {
@@ -303,6 +308,8 @@ body {
 
 .dashboard-nav-item .iconify {
     flex-shrink: 0;
+    width: 24px;
+    height: 24px;
     color: var(--text);
 }
 
@@ -324,8 +331,14 @@ body {
     gap: 0.25rem;
 }
 
+.dashboard-user .iconify {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
 .dashboard-user-role {
-    font-size: var(--font-size-nav);
+    font-size: var(--font-size-small);
     line-height: 1.2;
     color: var(--text);
 }
@@ -409,7 +422,6 @@ body {
 /* Tekst nawigacji/duże nagłówki (font-size-nav, kolor biały) */
 .dashboard-nav-text,
 .dashboard-card-title,
-.dashboard-user-role,
 .dashboard-activity-title,
 .settings-section-title,
 .admin-table th {
